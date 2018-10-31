@@ -1,46 +1,47 @@
 import React, { Component } from "react";
 import "./App.css";
 import Card from "./component/Card";
+import { Provider } from "react-redux";
+import store from "./store";
+import { connect } from "react-redux";
+import { fetchPosts } from "./actions/postAction";
 
 class App extends Component {
-  state = {
-    data: []
-  };
+  // state = {
+  //   data: []
+  // };
 
   componentDidMount() {
-    const url = "https://jsonplaceholder.typicode.com/users";
-
-    fetch(url) // Call the fetch function passing the url of the API as a parameter
-      .then(response => response.json())
-      .then(json => {
-        this.setState({
-          data: json
-        });
-      })
-      .catch(function() {
-        // This is where you run code if the server returns any errors
-      });
+    this.props.fetchPosts();
   }
 
   handleDelete = user => {
-    let clonedUsers = [...this.state.data];
-    clonedUsers = clonedUsers.filter(item => item !== user);
-
-    this.setState({
-      data: clonedUsers
-    });
+    // let clonedUsers = [...this.state.data];
+    // clonedUsers = clonedUsers.filter(item => item !== user);
+    // this.setState({
+    //   data: clonedUsers
+    // });
   };
 
   render() {
     return (
-      <div className="App">
-        <h1>test</h1>
-        {this.state.data.map(user => (
-          <Card key={user.id} user={user} onDelete={this.handleDelete} />
-        ))}
-      </div>
+      <Provider store={store}>
+        <div className="App">
+          <h1>test</h1>
+          {this.props.posts.map(user => (
+            <Card key={user.id} user={user} onDelete={this.handleDelete} />
+          ))}
+        </div>
+      </Provider>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  posts: state.posts.items
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchPosts }
+)(App);
