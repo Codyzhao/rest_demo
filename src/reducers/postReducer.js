@@ -12,6 +12,12 @@ export default function(state = initalState, action) {
         ...state,
         items: action.payload
       };
+    case DELETE_POST:
+      console.log("delete post reducer");
+      return {
+        ...state,
+        item: action.payload
+      };
     default:
       return state;
   }

@@ -13,3 +13,11 @@ export const fetchPosts = () => dispatch => {
       // This is where you run code if the server returns any errors
     });
 };
+
+export const deletePost = user => dispatch => {
+  console.log("delete post action");
+  dispatch({
+    type: DELETE_POST,
+    payload: user
+  });
+};
